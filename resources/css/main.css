@@ -4,7 +4,7 @@
 }
 
 html{
-	background-color: #11001c;	
+	background-color: hsl(0, 0%, 0%);
 }
 
 #page-wrapper {
@@ -12,6 +12,8 @@ html{
 	max-width: 100vw;
 	margin: auto;
 	text-align: left;
+	background-color: hsl(280, 100%, 2%);
+	padding: 5% 10%;
 }
 
 header{
@@ -20,7 +22,7 @@ header{
 
 nav{
 	position: relative;
-	margin: 4% 0;
+	margin: 2% 0% 8%;
 }
 
 nav ul {
@@ -29,7 +31,8 @@ nav ul {
 	position: relative;
 	display: flex;
 	align-items: center;
-	gap: 5vw;
+	justify-content: flex-start;
+	gap: 3vw;
 }
 
 #zero, #ellipses{
@@ -37,7 +40,7 @@ nav ul {
 }
 
 nav ul .nav-links{
-	color: #E0E1E4;
+	color:hsl(355,42.9%,94.5%);/*#E0E1E4;*/
 }
 
 nav ul li {
@@ -48,27 +51,27 @@ nav ul li {
 
 nav ul li a {
 	text-decoration: none;
-	color: black;
 }
 
-nav ul li a:hover{
-	color: lightpink;
-}
-
+nav ul li a:hover{ color: lightpink; }
 #cohomological-arrows{
 	position: absolute;
 	top: 0;
 	left: 0;
 	width: 100%;
 	height: 100%;
-	pointer-events: none;
-}
+	pointer-events: none; }
 
 #page-title, footer{
-	padding: 3% 2%;
-	color: white;
-	background-color: rgba(237, 90, 183, 0.42);
-	border: solid rgba(237, 90, 183, 0.42) 6px;
+	padding: 0.8em 1em;
+	color:hsl(355, 43%, 100%);
+
+	background-color: hsla(322, 80%, 60%, 0.52);
+	/*background-color: hsla(314, 49%, 28%, 1.0);/*rgba(108, 38, 98, .42)*/ /*hsla(322, 80%, 64%, 1.0); */
+
+	/*hsla(309, 48, 29, 1.0) rgba(108, 38, 98, 1.0) rgba(237, 90, 183, 0.42)*/
+	border: 5px solid hsla(322, 80%, 60%, 0.52);
+	border-radius: 20px;
 }
 
 main{
@@ -84,14 +87,21 @@ main{
 	font-size: calc(10px + 1vw);
 }
 
+#about-me, #grid-container .box{
+	background-color:hsla(287, 50%, 63%, 0.35);
+	border: 5px solid hsla(287, 50%, 58%, 0.35);
+	color: hsl(355, 43%, 98%);
+	border-radius: 20px;
+}
+
 #about-me{
 	min-width: 25%;
 	max-width: 35%;
-	background-color: rgba(224, 186, 186, 0.93);
+/*	background-color:hsla(322, 80%, 60%, 0.45);/*rgba(224, 186, 186, 0.93)*/ /*rgba(108, 38, 98, 1.0)*/
+
 	padding: 1em 1.2em;
 	margin-right: 2%;
 	flex: 1;
-	border: solid rgba(237, 90, 183, 0.42) 5px;
 }
 
 #about-me-header{
@@ -102,7 +112,6 @@ main{
 	width: 88%;
 	height: auto;
 	border-radius: 50%;
-	border: ridge rgba(237, 90, 183, 0.42) 3px;
 }
 
 #grid-container{
@@ -124,11 +133,9 @@ main{
 }
 
 #grid-container .box{
-	background-color: rgba(224, 186, 186, 0.93);
 	padding: 1em 1.5em;
 	width: 100%;
 	min-width: 0;
-	border: solid rgba(237, 90, 183, 0.42) 5px;
 }
 
 #box1{
@@ -159,7 +166,8 @@ main{
 footer{
 	text-align: left;
 	color: white;
-	background-color: rgba(237, 90, 183, 0.4);
+	background-color: hsla(322, 80%, 64%, 0.42);
+	/*rgba(237, 90, 183, 0.4);*/
 	font-size: calc(3px + 2vw);
 	padding: 2%;
 	border-color: rgba(237, 90, 183, 0.42);
