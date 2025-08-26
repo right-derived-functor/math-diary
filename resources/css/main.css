@@ -54,7 +54,7 @@ nav ul .nav-links{
 }
 
 nav ul li {
-	font-size: calc(10px + 2vw);
+	font-size: clamp(5px + 1vw, 15px + 2vw, 3vw);
 	white-space: nowrap;
 	padding: 0 0.3em;
 	margin: 0 0 0.5em;
@@ -81,7 +81,7 @@ nav ul li a:hover{
 	padding: 0.8em 1em;
 	color:hsl(355, 43%, 100%);
  
-	background-color: hsla(322, 75%, 60%, 0.52);
+	background: linear-gradient(hsla(322, 75%, 60%, 0.52), hsla(322, 75%, 60%, 0.57), hsla(322, 75%, 60%, 0.62));
 	/*background-color: hsla(314, 49%, 28%, 1.0);/*rgba(108, 38, 98, .42)*/ /*hsla(322, 80%, 64%, 1.0); */
 
 	/*hsla(309, 48, 29, 1.0) rgba(108, 38, 98, 1.0) rgba(237, 90, 183, 0.42)*/
@@ -103,10 +103,10 @@ main{
 }
 
 #about-me, #grid-container .box{
-	background-color:hsla(287, 45%, 63%, 0.35);
-	border: 5px solid hsla(287, 45%, 58%, 0.35);
+	border: 5px solid hsla(287, 45%, 58%, 0.38);
 	color: hsl(355, 43%, 98%);
 	border-radius: 20px;
+	background: linear-gradient(hsla(287, 45%, 63%, 0.38), hsla(287, 45%, 63%, 0.43), hsla(287, 45%, 63%, 0.48));
 }
 
 #about-me{
@@ -177,6 +177,20 @@ main{
 	grid-area: box8;
 }
 
+
+/* hover effects for the boxes */
+
+#page-title, #about-me, #grid-container .box {
+	background-size: 200% 200%; /*zoom in so we when me move the background position it creates a cool shifting effect */
+	transition: background-position 0.5s ease, transform 0.7s ease, box-shadow 0.5s ease;
+}
+
+#page-title:hover, #about-me:hover, #grid-container .box:hover {
+	background-position: right center;
+	box-shadow: 0 0 10px hsla(360, 100%, 100%, 0.5);
+	transform: scale(1.02);
+}
+
 footer{
 	text-align: left;
 	color: white;
@@ -228,18 +242,10 @@ a:active{
 		margin-right: auto;
 	}
 
-	nav{
-		padding: 3vh 3%;
-	}
-
 	nav ul {
 		justify-content: space-evenly;
-		gap: 3vw;
 	}
 
-	nav ul li{
-		font-size: calc(7px + 2vw);
-	}
 }
 
 @media screen and (max-width: 600px) {
@@ -254,13 +260,5 @@ a:active{
 		"box6"
 		"box7"
 		"box8"
-	}
-
-	nav ul{
-		gap: 2vw;
-	}
-
-	nav ul li{
-		font-size: calc(6px + 2vw);
 	}
 }
