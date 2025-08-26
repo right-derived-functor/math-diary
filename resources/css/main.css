@@ -10,13 +10,19 @@ html{
     repeating-linear-gradient(-45deg, rgba(255,255,255,0.05) 0, rgba(255,255,255,0.05) 1px, transparent 1px, transparent 12px);*/
 }
 
-#page-wrapper {
+.page-wrapper {
 	width: 85%;
 	max-width: 100vw;
 	margin: auto;
 	text-align: left;
 	background-color: hsla(280, 100%, 2%, .6);
 	padding: 5% 10%;
+	font-size: calc(10px + 1vw);
+	overflow-wrap: break-word;
+}
+
+.page-wrapper p {
+	line-height: 1.5em;
 }
 
 header{
@@ -25,14 +31,13 @@ header{
 
 nav{
 	position: relative;
-	margin-bottom: 6%;
+	margin-bottom: 2%;
 }
 
 nav ul {
 	list-style: none;
 	padding-left: 0;
 	position: relative;
-
 	display: flex;
 	align-items: center;
 	justify-content: flex-start;
@@ -40,11 +45,11 @@ nav ul {
 	flex-wrap: wrap;
 }
 
-#zero, #ellipses{
+nav ul .zero, .ellipses{
 	color: gray;
 }
 
-#zero {
+nav ul .zero {
 	width: 100%;
 	text-align: right;
 }
@@ -56,7 +61,7 @@ nav ul .nav-links{
 nav ul li {
 	font-size: clamp(5px + 1vw, 15px + 2vw, 3vw);
 	white-space: nowrap;
-	padding: 0 0.3em;
+	padding: 0.4em 0.3em;
 	margin: 0 0 0.5em;
 }
 
@@ -77,11 +82,11 @@ nav ul li a:hover{
 	pointer-events: none;
 }
 
-#page-title, footer{
+.page-title-box, footer{
 	padding: 0.8em 1em;
 	color:hsl(355, 43%, 100%);
  
-	background: linear-gradient(hsla(322, 75%, 60%, 0.52), hsla(322, 75%, 60%, 0.57), hsla(322, 75%, 60%, 0.62));
+	background: linear-gradient(hsla(322, 75%, 60%, 0.52), hsla(322, 75%, 60%, 0.57), hsla(322, 75%, 60%, 0.70));
 	/*background-color: hsla(314, 49%, 28%, 1.0);/*rgba(108, 38, 98, .42)*/ /*hsla(322, 80%, 64%, 1.0); */
 
 	/*hsla(309, 48, 29, 1.0) rgba(108, 38, 98, 1.0) rgba(237, 90, 183, 0.42)*/
@@ -94,32 +99,43 @@ main{
 	margin: 5% 0;
 }
 
-#flex-container{
+.flex-container{
 	display: flex;
 	flex-direction: row;
 	gap: 2vw;
 	align-items: flex-start;
-	font-size: calc(10px + 1vw);
 }
 
-#about-me, #grid-container .box{
+.content-box{
 	border: 5px solid hsla(287, 45%, 58%, 0.38);
 	color: hsl(355, 43%, 98%);
 	border-radius: 20px;
-	background: linear-gradient(hsla(287, 45%, 63%, 0.38), hsla(287, 45%, 63%, 0.43), hsla(287, 45%, 63%, 0.48));
+	background: linear-gradient(hsla(287, 45%, 63%, 0.38), hsla(287, 45%, 63%, 0.43), hsla(287, 45%, 63%, 0.51));
+	padding: 1em 1.5em;
 }
 
-#about-me{
-	min-width: 25%;
-	max-width: 35%;
+
+.contacts-box{
+	margin-top: 5%;
+}
+
+.about-me-box{
+	min-width: 30%;
+	max-width: 40%;
 	/*	background-color:hsla(322, 80%, 60%, 0.45);/*rgba(224, 186, 186, 0.93)*/ /*rgba(108, 38, 98, 1.0)*/
 
 	padding: 1em 1.2em;
 	flex: 1;
 }
 
-#about-me-header{
-	margin: 0.5em 0 1em;
+.about-me-box-header{
+	margin: 1em 0;
+}
+
+object.email{
+	height: 2em;
+	width: calc(315/24 * 1em);
+	vertical-align: middle;
 }
 
 #portrait{
@@ -128,7 +144,7 @@ main{
 	border-radius: 50%;
 }
 
-#grid-container{
+.grid-container{
 	display: grid;
 	grid-template-areas:
 	"box1 box1 box1 box1"
@@ -137,20 +153,15 @@ main{
 	"box5 box5 box6 box6"
 	"box7 box7 box7 box7"
 	"box8 box8 box8 box8"
+	"contacts contacts contacts contacts"
 	;
 	grid-template-columns: repeat(4, 1fr);
 	grid-auto-rows: auto;
 	gap: 1em;
-	font-size: calc(10px + 1vw);
 }
 
-#grid-container .box-header{
+.grid-box-header{
 	margin-bottom: 0.75em;
-}
-
-#grid-container .box{
-	padding: 1em 1.5em;
-	min-width: 0;
 }
 
 #box1{
@@ -181,15 +192,22 @@ main{
 
 /* hover effects for the boxes */
 
-#page-title, #about-me, #grid-container .box {
+.box {
 	background-size: 200% 200%; /*zoom in so we when me move the background position it creates a cool shifting effect */
 	transition: background-position 0.5s ease, transform 0.7s ease, box-shadow 0.5s ease;
 }
 
-#page-title:hover, #about-me:hover, #grid-container .box:hover {
+.box:hover {
 	background-position: right center;
 	box-shadow: 0 0 10px hsla(360, 100%, 100%, 0.5);
 	transform: scale(1.02);
+}
+
+.contacts-box-header{
+	margin-bottom: 0.4em;
+}
+.contacts-box p{
+	line-height: 1.6em;
 }
 
 footer{
@@ -213,15 +231,15 @@ a:active{
 }
 
 @media screen and (max-width: 768px) {
-	#page-wrapper{
+	.page-wrapper{
 		text-align: center;
 	}
 
-	#flex-container{
+	.flex-container{
 		flex-direction: column;
 	}
 
-	#about-me{
+	.about-me-box{
 		max-width: 100vw;
 		width: 100%;
 		margin: 0 0 2%;
@@ -240,7 +258,7 @@ a:active{
 		text-align: center;
 	}
 
-	#ellipses {
+	.ellipses {
 		margin-right: auto;
 	}
 
@@ -251,7 +269,7 @@ a:active{
 }
 
 @media screen and (max-width: 600px) {
-	#grid-container{
+	.grid-container{
 		grid-template-columns: 1fr;
 		grid-template-areas:
 		"box1"

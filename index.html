@@ -4,15 +4,19 @@
 		<meta charset="UFT-8" />
 		<link type="text/css" rel="stylesheet"
 									 href="resources/css/main.css" />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
 		<title>Home | L.E.F.</title>
-		<meta name="description" content="" />
+		<meta name="description" content="Via's Math Diary, a
+		personal website where I post my thoughts about math" />
+		<meta name="viewport" content="width=device-width,
+						initial-scale=1"/>
 	</head>
 	<body>
-		<div id="page-wrapper">
+		<div class="page-wrapper">
 			<header>
 				<nav>
 					<ul>
-						<li id="zero">\(0\)</li>
+						<li class="zero">\(0\)</li>
 						<li><a href="#"
 								 class="nav-links">Projects</a></li>
 						<li><a href="#"
@@ -22,14 +26,12 @@
 								 class="nav-links">Proofs</a></li>
 						<li><a href="#"
 								 class="nav-links">Musings</a></li>
-						<li id="ellipses">\(\cdots\)</li>
+						<li class="ellipses">\(\cdots\)</li>
 					</ul>
 				</nav>
 				<svg id="cohomological-arrows"></svg>
 
-				<div id="page-title"> <!-- Wrapped header elements in
-				a div because otherwise flex display turns them
-				inline-->
+				<div class="page-title-box box">
 				<h1>Via's Math Diary</h1>
 				<p>Home</p>
 				</div>
@@ -37,12 +39,13 @@
 			</header>							
 
 			<main>
-				<div id="flex-container">
-					<aside id="about-me">
+				<div class="flex-container">
+					<aside class="content-box about-me-box box">
 						<img src="resources/src/portrait.jpg"
 							  alt="Photo of me" id="portrait"<br>
 
-							  <h2 id="about-me-header">About Me</h2>
+							  <h2
+								  class="about-me-box-header">About Me</h2>
 
 							  <p> Hi! I'm Via (<em>she/her</em>), lover of
 							  numbers and functors. Welcome to my personal
@@ -50,19 +53,16 @@
 
 							  I'm a pure math
 							  student with a focus on number
-							  theory. Please reach out if
-							  you'd like to talk!						<br><br>
-
-							  Discord: <a
-								  href="https://discord.com/users/right-derived-functor">right-derived-functor</a><br>
-							  Gmail: <span id="email"></span>
-
+							  theory. Please <a href="#contacts"
+								  aria-label="anchor link to my contacts">reach
+								  out</a> if you'd like to talk!					
 							  </p>
+
 					</aside>
 
-					<div id="grid-container">
-						<section class="box" id="box1">
-							<h2 class="box-header"> Currently working on </h2>
+					<div class="grid-container">
+						<section class="content-box grid-box box" id="box1">
+							<h2 class="grid-box-header"> Currently working on </h2>
 							<p> Let \(G\) be a Hausdorff
 							topological group, and let
 							\(\Gamma\le G\). Suppose the
@@ -74,60 +74,75 @@
 							limit points in \(G\). </p>
 						</section>
 
-						<section class="box" id="box2">
-							<h2 class="box-header"> Current Projects </h2>
+						<section class="content-box grid-box box" id="box2">
+							<h2 class="grid-box-header"> Current Projects </h2>
 							<p>Studying <em>The Arithmetic
 								Theory of Automorphic
 								Forms</em>, grad apps :(</p>
 
 						</section>
 
-						<section class="box" id="box3">
-							<h2 class="box-header">Featured Idea</h2>
+						<section class="content-box grid-box box" id="box3">
+							<h2 class="grid-box-header">Featured Idea</h2>
 							<p>Cool theorem check out at
 							<a href="#">link</a>.</p>
 						</section>
 
-						<section class="box" id="box4">
-							<h2 class="box-header">Featured Exercise</h2>
+						<section class="content-box grid-box box" id="box4">
+							<h2 class="grid-box-header">Featured Exercise</h2>
 							<p>Some horrible Hatcher
 							exercise I really like.
 							Solution <a href="#">here</a>.</p>
 						</section>
 
-						<section class="box" id="box5">
-							<h2 class="box-header">Confused About</h2>
+						<section class="content-box grid-box box" id="box5">
+							<h2 class="grid-box-header">Confused About</h2>
 							<p>The octahedral axiom</p>
 						</section>
 
-						<section class="box"
+						<section class="content-box grid-box box"
 									id="box6">
 							<h2
-									class="box-header">
+									class="box grid-box-header">
 								Reading</h2>
 							<p>Amelia Thornheart</p>
 						</section>
 
-						<section class="box"
+						<section class="content-box grid-box box"
 									id="box7">
 							<h2
-									class="box-header">Placeholder</h2>
+									class="grid-box-header">Placeholder</h2>
 							<p>blah blah</p>
 						</section>
 
-						<section class="box"
+						<section class="content-box grid-box box"
 									id="box8">
 							<h2
-									class="box-header">Placeholder</h2>
+									class="grid-box-header">Placeholder</h2>
 							<p>blah blah</p>
 						</section>
 
 
-					</div>
+					</div>	
 				</div>
+						<section class="content-box contacts-box box">
+							<h2 class="contacts-box-header"> Contacts </h2>
+							<p><i class="fa-brands fa-discord"
+								  aria-label="discord:"></i>
+							&nbsp;&nbsp;<a
+								  href="https://discord.com/users/right-derived-functor">right-derived-functor</a><br>
+							  <i class="fa-solid
+											fa-envelope"></i>&nbsp;&nbsp;&nbsp;<object class="email" 
+																			 height="24"
+																			 width="315"
+																			 data="email.svg"
+																		 type="image/svg+xml"></object>
+							</p>
+						</section>
+
 			</main>
 
-			<footer>All Rights Reserved. <a href="#">Credits</a>
+			<footer class="box">All Rights Reserved. <a href="#">Credits</a>
 				&#169;</footer>
 		</div>
 

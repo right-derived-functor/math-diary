@@ -61,7 +61,7 @@ function drawArrows() {
 			L ${x2 - arrowOffset} ${y2}
 			`;
 			pathColor = 'hsla(322, 80%, 60%, 0.8)';
-			strokeWidth = 2 * arrowSize / 3;
+			strokeWidth = 3 * arrowSize / 4;
 		}
 		else {
 			//straight line from --> to
