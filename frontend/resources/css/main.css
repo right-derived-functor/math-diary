@@ -143,9 +143,11 @@ object.email{
 }
 
 #portrait{
-	width: 88%;
+	margin-top: 0.4em;
+	width: 90%;
 	height: auto;
 	border-radius: 50%;
+	border: 4px solid hsla(287, 45%, 58%, 0.38);
 }
 
 .grid-container{
