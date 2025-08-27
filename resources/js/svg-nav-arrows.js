@@ -1,4 +1,4 @@
-const navItems = document.querySelectorAll('nav ul li');
+let navItems = document.querySelectorAll('nav ul li');
 
 // returns the vertical gap from item index in nav to the previous item in nav. Input any index of navItems greater than 0.
 function getVerticalGapFromPrev(index) {
@@ -18,11 +18,14 @@ function isFirstWrap(index) {
 
 // if an item is first wrap, shift it to the right.
 function shiftItem() {
+	let lastVerticalGap;
 	for (let i = 1; i < navItems.length; i++) {
 		if (isFirstWrap(i)) {
-			navItems[i].style.marginLeft = `${getVerticalGapFromPrev(i)/2}px`;
-		} 
+			lastVerticalGap = getVerticalGapFromPrev(i);
+			navItems[i].style.marginLeft = `${lastVerticalGap/2}px`;
+		}
 	}
+	document.getElementById("ellipses").style.marginLeft=`${lastVerticalGap/2}px`;
 }
 
 function drawArrows() {
@@ -47,7 +50,10 @@ function drawArrows() {
 		const arrowSize = Math.min(8, window.innerWidth * 0.008);
 
 		let path, pathColor, strokeWidth;
-		if (isFirstWrap(i+1)) {
+		if (navItems[i + 1].style.display === "none"){
+			return;
+		}
+		else if (isFirstWrap(i+1)) {
 			const quarterVerticalGap = (y2 - y1) / 4;
 			const midY = y1 + 2 * quarterVerticalGap;
 
@@ -81,7 +87,7 @@ function drawArrows() {
 		// arrowhead
 		const arrow = document.createElementNS(svgNS, 'polygon');
 		arrow.setAttribute('points', `
-		${x2},${y2}
+		${x2},${y2},
 		${x2 - arrowOffset},${y2 - arrowSize}
 		${x2 - arrowOffset},${y2 + arrowSize}
 	 `);
@@ -94,7 +100,83 @@ function drawArrows() {
 	}
 }
 
-window.addEventListener('load', shiftItem);
-window.addEventListener('resize', shiftItem);
-window.addEventListener('load', drawArrows);
-window.addEventListener('resize', drawArrows);
+// find the index of the first element of the second row. If it doesn't exist return -1
+function findSecondRowFirstWrap() {
+	for (let i=2; i<navItems.length; i++) {
+		if (isFirstWrap(i)) {
+			return i;
+		}
+	}
+	return -1;
+}
+
+// if there is more than one row after the first, and the first element of the second row is not an ellipsis, do the following: collapse the rest of the nav from and including the first element of the second row. Then change that element to an ellipsis. Furthermore change the ellipsis to an interactable "button" that expands the rest of the nav when clicked. Then the final ellipsis also becomes a link that applies this function when clicked.
+function collapseNav() {	
+	if (isCollapsible) {
+		let secondRowFirstIndex = findSecondRowFirstWrap();
+		navItems.forEach((li, i) => {
+			i > secondRowFirstIndex && (li.style.display = "none")
+		});
+
+		const secondRowFirstElement = navItems[secondRowFirstIndex];
+		const ellipses = document.createElement("li");
+		ellipses.textContent = "\\(\\cdots\\)";
+		ellipses.style.cursor = "pointer";
+		ellipses.style.width = "100%";
+		console.log(secondRowFirstElement.offsetWidth);
+		ellipses.classList.add('ellipses');
+		ellipses.classList.add('ellipses-links');
+
+		MathJax.typesetPromise([ellipses]);
+		navItemsParent = navItems[0].parentElement;
+		ellipses.style.marginLeft = `${getVerticalGapFromPrev(secondRowFirstIndex)/2}px`;
+		navItemsParent.replaceChild(ellipses, navItems[secondRowFirstIndex]);
+		navItems = document.querySelectorAll('nav ul li');
+
+		ellipses.addEventListener("click", () => {
+			navItemsParent.replaceChild(secondRowFirstElement, ellipses);
+			navItems = document.querySelectorAll('nav ul li');
+			navItems.forEach((li, i) => {
+				i > secondRowFirstIndex && (li.style.display = "");
+			});
+			shiftItem();
+			drawArrows();
+		});	
+	}
+	else{
+		return;
+	}
+}
+
+// detects when the nav bar is collapsible (see the rules written above the function collapseNav).
+function isCollapsible() {
+	let secondRowFirstIndex = findSecondRowFirstWrap();
+	return (secondRowFirstIndex !== -1 && secondRowFirstIndex !== navItems.length - 1);
+}
+
+// if the nav is collapsible, turn the last ellipses into a button that collpases the nav
+function toggleCollapseButton(){
+	if (isCollapsible()) {
+		const originalEllipses = document.getElementById("ellipses");
+		originalEllipses.style.cursor = "pointer";
+		originalEllipses.classList.add('ellipses-links');
+		originalEllipses.addEventListener("click", () => {
+			collapseNav();
+			drawArrows();
+		})
+	
+	}
+}
+
+window.addEventListener('load', () => {
+	shiftItem();
+	toggleCollapseButton();
+	collapseNav();
+	drawArrows();
+});
+
+window.addEventListener('resize', () => {
+	shiftItem();
+	drawArrows();
+});
+
