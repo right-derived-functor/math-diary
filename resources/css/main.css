@@ -138,7 +138,7 @@ main{
 
 object.email{
 	height: 2em;
-	width: calc(315/24 * 1em);
+	width: calc(420/24 * 1em);
 	vertical-align: middle;
 }
 
@@ -285,5 +285,8 @@ a:active{
 		"box6"
 		"box7"
 		"box8"
+	}
+	.contacts-box p{
+		font-size: calc(6px + 1vw);
 	}
 }
