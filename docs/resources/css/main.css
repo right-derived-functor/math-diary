@@ -34,7 +34,6 @@ header{
 }
 
 nav{
-	position: relative;
 	margin-bottom: 2%;
 }
 
@@ -77,13 +76,14 @@ nav ul li a:hover, nav ul li.ellipses-links:hover {
 	color: hsl(322, 75%, 60%); 
 }
 
-#cohomological-arrows{
+.cohomological-arrows{
 	position: absolute;
 	top: 0;
 	left: 0;
 	width: 100%;
 	height: 100%;
 	pointer-events: none;
+	overflow: visible;
 }
 
 .page-title-box, footer{
@@ -116,6 +116,7 @@ main{
 	border-radius: 20px;
 	background: linear-gradient(hsla(287, 45%, 63%, 0.38), hsla(287, 45%, 63%, 0.43), hsla(287, 45%, 63%, 0.51));
 	padding: 1em 1.5em;
+	min-width: 0;
 }
 
 
@@ -125,7 +126,7 @@ main{
 
 .about-me-box{
 	min-width: 30%;
-	max-width: 40%;
+	max-width: 35%;
 	/*	background-color:hsla(322, 80%, 60%, 0.45);/*rgba(224, 186, 186, 0.93)*/ /*rgba(108, 38, 98, 1.0)*/
 
 	padding: 1em 1.2em;
@@ -158,41 +159,46 @@ object.email{
 	"box3 box3 box4 box4"
 	"box5 box5 box6 box6"
 	"box7 box7 box7 box7"
-	"box8 box8 box8 box8"
+	"box8 box8 box8 box9"
 	"contacts contacts contacts contacts"
 	;
-	grid-template-columns: repeat(4, 1fr);
+	grid-template-columns: repeat(4, auto);
 	grid-auto-rows: auto;
 	gap: 1em;
+	flex: 1;
+	min-width: 0;
 }
 
 .grid-box-header{
 	margin-bottom: 0.75em;
 }
 
-#box1{
+.box1{
 	grid-area: box1;
 }
-#box2{
+.box2{
 	grid-area: box2;
 }
-#box3{
+.box3{
 	grid-area: box3;
 }
-#box4{
+.box4{
 	grid-area: box4;
 }
-#box5{
+.box5{
 	grid-area: box5;
 }
-#box6{
+.box6{
 	grid-area: box6;
 }
-#box7{
+.box7{
 	grid-area: box7;
 }
-#box8{
+.box8{
 	grid-area: box8;
+}
+.box9{
+	grid-area: box9;
 }
 
 
@@ -200,13 +206,12 @@ object.email{
 
 .box {
 	background-size: 200% 200%; /*zoom in so we when me move the background position it creates a cool shifting effect */
-	transition: background-position 0.5s ease, transform 0.7s ease, box-shadow 0.5s ease;
+	transition: background-position 0.5s ease, box-shadow 0.5s ease;
 }
 
 .box:hover {
 	background-position: right center;
 	box-shadow: 0 0 10px hsla(360, 100%, 100%, 0.5);
-	transform: scale(1.02);
 }
 
 .contacts-box-header{
@@ -217,8 +222,6 @@ object.email{
 }
 
 footer{
-	text-align: left;
-	color: white;
 	font-size: calc(3px + 2vw);
 	padding: 2%;
 	margin-bottom: 5%;
@@ -233,10 +236,89 @@ a:visited{
 }
 
 a:active{
-	color: hsl(180, 100%, 47%);
+	color: hsl(180, 70%, 47%);
 }
 
-@media screen and (max-width: 768px) {
+/*listfm lmao*/
+#lastfm-categories {
+	list-style: none;
+	padding-left: 0;
+	position: relative;
+	display: flex;
+	flex-flow: row wrap;
+	align-items: center;
+	justify-content: flex-start;
+	gap: 0.3em 0.6em;
+	width: 100%;
+}
+
+.lastfm-top {
+	align-self: stretch;
+	font-size: 1em;
+	margin-right: -0.2em;
+}
+
+.lastfm-type {
+	font-size: clamp(0.55em, 1.65vw, 0.8em);
+	align-self: stretch;
+	display: flex;
+	align-items: center
+}
+.lastfm-time {
+	font-size: clamp(0.40em, 1.4vw, 0.6em) ;
+	align-self: stretch;
+	display: flex;
+	align-items: center;
+} 
+
+.lastfm-type, .lastfm-time {
+	cursor: pointer;
+	color: hsl(40, 100%, 47%);
+	padding: 0 0.2em;
+}
+
+.lastfm-type .scale-wrapper,
+.lastfm-time .scale-wrapper {
+    display: inline-block;   /* needed for transform */
+    opacity: 0.4;
+    transition: opacity 0.3s, transform 0.3s;
+}
+
+/* Hover over the li or selected li */
+.lastfm-type:hover .scale-wrapper,
+.lastfm-type .scale-wrapper.selected,
+.lastfm-time:hover .scale-wrapper,
+.lastfm-time .scale-wrapper.selected {
+    transform: scale(1.1);
+    opacity: 1;
+    cursor: pointer;  /* makes it clear it’s clickable */
+}
+/* .lastfm-type:hover, .lastfm-time:hover {
+	opacity: 1;
+	transform: scale(1.1);
+}*/
+
+/*.lastfm-type.selected .scale-wrapper, .lastfm-time.selected .scale-wrapper {
+	opacity: 1;
+	transform: scale(1.1);
+}*/
+
+#lastfm-categories hr {
+	flex-basis: 100%;
+	height: 0;
+	margin: 0;
+	border: 0;
+}
+
+#lastfm-list li a {
+	color: hsl(355, 43%, 98%);
+}
+
+#lastfm-list li a:hover {
+	color: hsl(40, 100%, 47%);
+}
+
+@media screen and (max-width: 900px) {
 	.page-wrapper{
 		text-align: center;
 	}
@@ -272,6 +354,22 @@ a:active{
 	nav ul {
 		justify-content: space-evenly;
 	}
+	
+	#lastfm-categories {
+		justify-content: center;
+	}
+	.lastfm-top {
+		font-size: 1em;
+	}
+
+	.lastfm-type {
+		font-size: clamp(0.7em, 2.5vw, 0.9em);
+	}
+
+	.lastfm-time {
+		font-size: clamp(0.6em, 2vw, 0.7em);
+	}
+
 
 }
 
@@ -287,8 +385,22 @@ a:active{
 		"box6"
 		"box7"
 		"box8"
+		"box9"
 	}
 	.contacts-box p{
 		font-size: calc(6px + 1vw);
 	}
+
+	.lastfm-top {
+		font-size: 0.95em;
+	}
+	.lastfm-type {
+		font-size: clamp(0.4em, 2.5vw, 0.8em);
+	}
+
+	.lastfm-time {
+		font-size: clamp(0.35em, 2vw, 0.6em);
+	}
+
+
 }

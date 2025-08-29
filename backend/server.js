@@ -2,30 +2,135 @@ import express from "express";
 import fetch from "node-fetch";
 import dotenv from "dotenv";
 
-//docs: https://expressjs.com/en/5x/api.html
+import cors from "cors";
+
+// for my reference: docs at https://expressjs.com/en/5x/api.html
 
 dotenv.config(); // reads .env file and makes them available in process.env
 const app = express(); // server
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3002;
 
-app.get("api/lastfm/:artist", async (req, res) => {
-	const artist = req.params.artist;
 
+app.use(cors()); //TEMPORARY
+
+//parameters that are fixed across api calls (for now)
+const fixedParams = {
+	user: "l-e-f",
+	format: "json",
+	limit: 5,
+	api_key: process.env.LASTFM_API_KEY,
+}
+
+app.get('/api/lastfm/topdata', async(req, res) => {
 	try {
-		const response = await fetch(
-		`https://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=${encodeURIComponent(
-			artist
-		)}&api_key=${process.env.LASTFM_API_KEY}&format=json`
-		);
+		const params = {...fixedParams,};
+	
 
+		params.method = req.query.method;
+
+		if (req.query.period) params.period = req.query.period;
+
+		const url = "https://ws.audioscrobbler.com/2.0/?" + new URLSearchParams(params);
+
+		const response = await fetch(url);
 		const data = await response.json();
+
 		res.json(data);
-	} catch (err) {
+	} catch (err){
 		console.error(err);
-		res.status(500).json({ error: "Failed to fetch from last.fm" });
+		res.status(500).json({ error: "Failed to fetch lastfm data" }); //make more specific later
 	}
 });
 
+app.get('/api/lastfm/toptracks', async (req, res) => {
+	try {
+		const params = { ...fixedParams,
+			method: "user.getTopTracks",
+		};
+
+		// user input
+		if (req.query.period) params.period = req.query.period;
+
+		// build url, URLSearchParams builds a url based on the parameters given, pretty neat.
+		const url = "https://ws.audioscrobbler.com/2.0/?" + new URLSearchParams(params);
+
+		const response = await fetch(url);
+		const data = await response.json();
+
+		res.json(data); //send api data to front end
+
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ error: "Failed to fetch weekly top tracks" });
+	}
+});
+
+app.get('/api/lastfm/topalbums', async (req, res) => {
+	try {
+		const params = { ...fixedParams,
+			method: "user.getTopAlbums",
+		};
+
+		// user input
+		if (req.query.period) params.period = req.query.period;
+
+		// build url, URLSearchParams builds a url based on the parameters given, pretty neat.
+		const url = "https://ws.audioscrobbler.com/2.0/?" + new URLSearchParams(params);
+
+		const response = await fetch(url);
+		const data = await response.json();
+
+		res.json(data); //send api data to front end
+
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ error: "Failed to fetch weekly top tracks" });
+	}
+});
+
+app.get('/api/lastfm/topArtists', async (req, res) => {
+	try {
+		const params = { ...fixedParams,
+			method: "user.getTopArtists",
+		};
+
+		// user input
+		if (req.query.period) params.period = req.query.period;
+
+		// build url, URLSearchParams builds a url based on the parameters given, pretty neat.
+		const url = "https://ws.audioscrobbler.com/2.0/?" + new URLSearchParams(params);
+
+		const response = await fetch(url);
+		const data = await response.json();
+
+		res.json(data); //send api data to front end
+
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ error: "Failed to fetch weekly top tracks" });
+	}
+});
+
+
+app.get('/api/lastfm/recenttracks', async (req, res) => {
+	try{
+		const params = { ...fixedParams,
+			method: "user.getRecentTracks",
+		}
+
+		const url = "https://ws.audioscrobbler.com/2.0/?" + new URLSearchParams(params);
+
+		const response = await fetch(url);
+		const data = await response.json();
+
+		res.json(data);
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ error: "Failed to fetch recent tracks" });
+	}
+});
+
+//start the server
 app.listen(PORT, () => {
 	console.log(`Server running on port ${PORT}`);
 });
