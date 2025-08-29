@@ -11,7 +11,9 @@ const app = express(); // server
 const PORT = process.env.PORT || 3002;
 
 
-app.use(cors()); //TEMPORARY
+app.use(cors({
+	origin: "https://right-derived-functor.github.io/"
+}));
 
 //parameters that are fixed across api calls (for now)
 const fixedParams = {
@@ -39,75 +41,6 @@ app.get('/api/lastfm/topdata', async(req, res) => {
 	} catch (err){
 		console.error(err);
 		res.status(500).json({ error: "Failed to fetch lastfm data" }); //make more specific later
-	}
-});
-
-app.get('/api/lastfm/toptracks', async (req, res) => {
-	try {
-		const params = { ...fixedParams,
-			method: "user.getTopTracks",
-		};
-
-		// user input
-		if (req.query.period) params.period = req.query.period;
-
-		// build url, URLSearchParams builds a url based on the parameters given, pretty neat.
-		const url = "https://ws.audioscrobbler.com/2.0/?" + new URLSearchParams(params);
-
-		const response = await fetch(url);
-		const data = await response.json();
-
-		res.json(data); //send api data to front end
-
-	} catch (err) {
-		console.error(err);
-		res.status(500).json({ error: "Failed to fetch weekly top tracks" });
-	}
-});
-
-app.get('/api/lastfm/topalbums', async (req, res) => {
-	try {
-		const params = { ...fixedParams,
-			method: "user.getTopAlbums",
-		};
-
-		// user input
-		if (req.query.period) params.period = req.query.period;
-
-		// build url, URLSearchParams builds a url based on the parameters given, pretty neat.
-		const url = "https://ws.audioscrobbler.com/2.0/?" + new URLSearchParams(params);
-
-		const response = await fetch(url);
-		const data = await response.json();
-
-		res.json(data); //send api data to front end
-
-	} catch (err) {
-		console.error(err);
-		res.status(500).json({ error: "Failed to fetch weekly top tracks" });
-	}
-});
-
-app.get('/api/lastfm/topArtists', async (req, res) => {
-	try {
-		const params = { ...fixedParams,
-			method: "user.getTopArtists",
-		};
-
-		// user input
-		if (req.query.period) params.period = req.query.period;
-
-		// build url, URLSearchParams builds a url based on the parameters given, pretty neat.
-		const url = "https://ws.audioscrobbler.com/2.0/?" + new URLSearchParams(params);
-
-		const response = await fetch(url);
-		const data = await response.json();
-
-		res.json(data); //send api data to front end
-
-	} catch (err) {
-		console.error(err);
-		res.status(500).json({ error: "Failed to fetch weekly top tracks" });
 	}
 });
 

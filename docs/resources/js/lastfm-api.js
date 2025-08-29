@@ -24,7 +24,7 @@ async function fetchTopData(category, period) {
 	}
 	const method = categoryToMethod[category];
 
-	const response = await fetch(`http://localhost:3002/api/lastfm/topdata?method=${method}&?period=${period}`);
+	const response = await fetch(`https://via-math-diary.onrender.com/api/lastfm/topdata?method=${method}&?period=${period}`);
 	const data = await response.json();
 	cache[category][period] = data;
 
