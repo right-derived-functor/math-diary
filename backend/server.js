@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 3002;
 
 
 app.use(cors({
-	origin: "https://right-derived-functor.github.io/"
+	origin: "https://right-derived-functor.github.io/math-diary/"
 }));
 
 //parameters that are fixed across api calls (for now)
@@ -43,7 +43,6 @@ app.get('/api/lastfm/topdata', async(req, res) => {
 		res.status(500).json({ error: "Failed to fetch lastfm data" }); //make more specific later
 	}
 });
-
 
 app.get('/api/lastfm/recenttracks', async (req, res) => {
 	try{
