@@ -47,83 +47,85 @@ class CohomologicalList {
 		document.getElementById("ellipses").style.marginLeft=`${lastVerticalGap/2}px`;
 	}
 
-	drawArrows() {
-		const svgNS = "http://www.w3.org/2000/svg";
-		const itemsParent = this.items[0].parentElement;
-		const svg = itemsParent.parentElement.querySelector('svg.cohomological-arrows');
-		console.log(itemsParent.parentElement);
+drawArrows() {
+	const svgNS = "http://www.w3.org/2000/svg";
+	const itemsParent = this.items[0].parentElement;
+	const svg = itemsParent.parentElement.querySelector('svg.cohomological-arrows');
 
-//		const svg = document.getElementById('cohomological-arrows');
-		svg.innerHTML = '';
-		const svgRect = svg.getBoundingClientRect();
+	svg.innerHTML = '';
 
-		const leftMostX = itemsParent.getBoundingClientRect().left;
-		const rightMostX = itemsParent.getBoundingClientRect().right;
+	// Use visualViewport if available, fallback to scroll
+	const vv = window.visualViewport;
+	const scrollX = vv ? vv.offsetLeft : window.scrollX || window.pageXOffset;
+	const scrollY = vv ? vv.offsetTop : window.scrollY || window.pageYOffset;
 
-		for (let i = 0; i < this.items.length - 1; i++) {
-			const from = this.items[i].getBoundingClientRect();
-			const to = this.items[i + 1].getBoundingClientRect();
+	const svgRect = svg.getBoundingClientRect();
+	const svgOffsetLeft = svgRect.left + scrollX;
+	const svgOffsetTop = svgRect.top + scrollY;
 
-			const x1 = from.right - svgRect.left;
-			const y1 = from.top + from.height / 2 - svgRect.top;
-			const x2 = to.left - svgRect.left;
-			const y2 = to.top + to.height / 2 - svgRect.top;
+	const leftMostX = itemsParent.getBoundingClientRect().left + scrollX;
+	const rightMostX = itemsParent.getBoundingClientRect().right + scrollX;
 
-			const arrowOffset = window.innerWidth * this.arrowOffsetRatio; //0.012
-			const arrowSize = window.innerWidth * this.arrowSizeRatio; //0.008
+	for (let i = 0; i < this.items.length - 1; i++) {
+		const from = this.items[i].getBoundingClientRect();
+		const to = this.items[i + 1].getBoundingClientRect();
 
-			let path, pathColor, strokeWidth;
-			if (this.items[i + 1].style.display === "none"){
-				return;
-			}
-			else if (this.isFirstWrap(i+1)) {
-				const quarterVerticalGap = (y2 - y1) / 4;
-				const midY = y1 + 2 * quarterVerticalGap;
+		// Positions relative to SVG, considering scroll/visual viewport
+		const x1 = from.right + scrollX - svgOffsetLeft;
+		const y1 = from.top + scrollY + from.height / 2 - svgOffsetTop;
+		const x2 = to.left + scrollX - svgOffsetLeft;
+		const y2 = to.top + scrollY + to.height / 2 - svgOffsetTop;
 
-				//winding path down to the next item.
-				path = `
-			M ${x1} ${y1}
-			L ${rightMostX} ${y1}
-			A ${quarterVerticalGap} ${quarterVerticalGap} ${0} ${0} ${1} ${rightMostX} ${midY}
-			L ${leftMostX} ${midY}
-			A ${quarterVerticalGap} ${quarterVerticalGap} ${0} ${0} ${0} ${leftMostX} ${y2}
-			L ${x2 - arrowOffset} ${y2}
+		const arrowOffset = window.innerWidth * this.arrowOffsetRatio;
+		const arrowSize = window.innerWidth * this.arrowSizeRatio;
+
+		if (this.items[i + 1].style.display === "none") continue;
+
+		let path, pathColor, strokeWidth;
+
+		if (this.isFirstWrap(i + 1)) {
+			const quarterVerticalGap = (y2 - y1) / 4;
+			const midY = y1 + 2 * quarterVerticalGap;
+
+			//winding path down to the next item.
+			path = `
+				M ${x1} ${y1}
+				L ${rightMostX - svgOffsetLeft} ${y1}
+				A ${quarterVerticalGap} ${quarterVerticalGap} 0 0 1 ${rightMostX - svgOffsetLeft} ${midY}
+				L ${leftMostX - svgOffsetLeft} ${midY}
+				A ${quarterVerticalGap} ${quarterVerticalGap} 0 0 0 ${leftMostX - svgOffsetLeft} ${y2}
+				L ${x2 - arrowOffset} ${y2}
 			`;
-				pathColor = this.snakeLineColor //'hsla(322, 80%, 60%, 0.8)';
-				strokeWidth = this.snakeLineWidthRatio * arrowSize; //3/4
-			}
-			else {
-				//straight line from --> to
-				path = `M ${x1} ${y1} L ${x2 - arrowOffset} ${y2}`;
-				pathColor = this.straightLineColor; //'gray'
-				strokeWidth = this.straightLineWidthRatio * arrowSize; //1/2
-
-			} 
-
-			// arrow path
-			const pathEl = document.createElementNS(svgNS, 'path');
-			pathEl.setAttribute('d', path);
-			pathEl.setAttribute('fill', 'none');
-			pathEl.setAttribute('stroke', pathColor);
-			pathEl.setAttribute('stroke-width', strokeWidth);
-
-			// arrowhead
-			const arrow = document.createElementNS(svgNS, 'polygon');
-			arrow.setAttribute('points', `
-		${x2},${y2},
-		${x2 - arrowOffset},${y2 - arrowSize}
-		${x2 - arrowOffset},${y2 + arrowSize}
-	 `);
-			arrow.setAttribute('fill', pathColor);
-
-			//			if (this.isFirstWrap(i))
-			svg.appendChild(pathEl);
-			svg.appendChild(arrow);
+			pathColor = this.snakeLineColor;
+			strokeWidth = this.snakeLineWidthRatio * arrowSize;
+		} else {
+			//straight line from --> to
+			path = `M ${x1} ${y1} L ${x2 - arrowOffset} ${y2}`;
+			pathColor = this.straightLineColor;
+			strokeWidth = this.straightLineWidthRatio * arrowSize;
 		}
 
-		// custom event to control order of scripts running cuz this function breaks constantly ughhhhhh i HHAATEEEEE this function god it causes nothing but trouble can't ever have any good things but i love my arrows so worth i love u drawArrows even tho ur sooooo annoying
-//		const event = new CustomEvent('arrowsDrawn', {detail: {list: this}}); document.dispatchEvent(event); it doesn't even work. i cannot
+		// Create arrow path
+		const pathEl = document.createElementNS(svgNS, 'path');
+		pathEl.setAttribute('d', path);
+		pathEl.setAttribute('fill', 'none');
+		pathEl.setAttribute('stroke', pathColor);
+		pathEl.setAttribute('stroke-width', strokeWidth);
+
+		// Create arrowhead
+		const arrow = document.createElementNS(svgNS, 'polygon');
+		arrow.setAttribute('points', `
+			${x2},${y2}
+			${x2 - arrowOffset},${y2 - arrowSize}
+			${x2 - arrowOffset},${y2 + arrowSize}
+		`);
+		arrow.setAttribute('fill', pathColor);
+
+		svg.appendChild(pathEl);
+		svg.appendChild(arrow);
 	}
+}		// custom event to control order of scripts running cuz this function breaks constantly ughhhhhh i HHAATEEEEE this function god it causes nothing but trouble can't ever have any good things but i love my arrows so worth i love u drawArrows even tho ur sooooo annoying
+//		const event = new CustomEvent('arrowsDrawn', {detail: {list: this}}); document.dispatchEvent(event); it doesn't even work. i cannot
 
 	// find the index of the first element of the second row. If it doesn't exist return -1
 	findSecondRowFirstWrap() {
@@ -222,3 +224,10 @@ window.addEventListener('resize', () => {
 	lastfmBar.drawArrows();
 });
 
+if (window.visualViewport) {
+	window.visualViewport.addEventListener('resize', () => this.drawArrows());
+	window.visualViewport.addEventListener('scroll', () => this.drawArrows());
+} else {
+	window.addEventListener('resize', () => this.drawArrows());
+	window.addEventListener('scroll', () => this.drawArrows());
+}
