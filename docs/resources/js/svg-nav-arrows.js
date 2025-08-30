@@ -14,7 +14,16 @@ class CohomologicalList {
 		this.snakeLineWidthRatio = snakeLineWidthRatio;
 		this.arrowSizeRatio = arrowSizeRatio;
 		this.arrowOffsetRatio = arrowOffsetRatio;
+
+		if (window.visualViewport) {
+			window.visualViewport.addEventListener('resize', () => this.drawArrows());
+			window.visualViewport.addEventListener('scroll', () => this.drawArrows());
+		} else {
+			window.addEventListener('resize', () => this.drawArrows());
+			window.addEventListener('scroll', () => this.drawArrows());
+		} 
 	}
+	
 
 	// returns the vertical gap from item index in nav to the previous item in nav. Input any index of this.items greater than 0.
 	getVerticalGapFromPrev(index) {
@@ -25,7 +34,7 @@ class CohomologicalList {
 	}
 
 	// function to detect if item index in nav is the first item in a new row. Input any index of this.items greater than 0.
-	 isFirstWrap(index) {
+	isFirstWrap(index) {
 		if (typeof index !== "number" || index <= 0 || index >= this.items.length)
 			throw new Error (`Invalid index ${index}. Must be between 1 and the index of the last nav item ${this.items.length - 1}`);
 
@@ -33,7 +42,7 @@ class CohomologicalList {
 	}
 
 	// if an item is first wrap, shift it to the right.
-	 shiftItem() {
+	shiftItem() {
 		let lastVerticalGap;
 		for (let i = 1; i < this.items.length; i++) {
 			if (this.isFirstWrap(i)) {
@@ -47,48 +56,48 @@ class CohomologicalList {
 		document.getElementById("ellipses").style.marginLeft=`${lastVerticalGap/2}px`;
 	}
 
-drawArrows() {
-	const svgNS = "http://www.w3.org/2000/svg";
-	const itemsParent = this.items[0].parentElement;
-	const svg = itemsParent.parentElement.querySelector('svg.cohomological-arrows');
+	drawArrows() {
+		const svgNS = "http://www.w3.org/2000/svg";
+		const itemsParent = this.items[0].parentElement;
+		const svg = itemsParent.parentElement.querySelector('svg.cohomological-arrows');
 
-	svg.innerHTML = '';
+		svg.innerHTML = '';
 
-	// Use visualViewport if available, fallback to scroll
-	const vv = window.visualViewport;
-	const scrollX = vv ? vv.offsetLeft : window.scrollX || window.pageXOffset;
-	const scrollY = vv ? vv.offsetTop : window.scrollY || window.pageYOffset;
+		// Use visualViewport if available, fallback to scroll
+		const vv = window.visualViewport;
+		const scrollX = vv ? vv.offsetLeft : window.scrollX || window.pageXOffset;
+		const scrollY = vv ? vv.offsetTop : window.scrollY || window.pageYOffset;
 
-	const svgRect = svg.getBoundingClientRect();
-	const svgOffsetLeft = svgRect.left + scrollX;
-	const svgOffsetTop = svgRect.top + scrollY;
+		const svgRect = svg.getBoundingClientRect();
+		const svgOffsetLeft = svgRect.left + scrollX;
+		const svgOffsetTop = svgRect.top + scrollY;
 
-	const leftMostX = itemsParent.getBoundingClientRect().left + scrollX;
-	const rightMostX = itemsParent.getBoundingClientRect().right + scrollX;
+		const leftMostX = itemsParent.getBoundingClientRect().left + scrollX;
+		const rightMostX = itemsParent.getBoundingClientRect().right + scrollX;
 
-	for (let i = 0; i < this.items.length - 1; i++) {
-		const from = this.items[i].getBoundingClientRect();
-		const to = this.items[i + 1].getBoundingClientRect();
+		for (let i = 0; i < this.items.length - 1; i++) {
+			const from = this.items[i].getBoundingClientRect();
+			const to = this.items[i + 1].getBoundingClientRect();
 
-		// Positions relative to SVG, considering scroll/visual viewport
-		const x1 = from.right + scrollX - svgOffsetLeft;
-		const y1 = from.top + scrollY + from.height / 2 - svgOffsetTop;
-		const x2 = to.left + scrollX - svgOffsetLeft;
-		const y2 = to.top + scrollY + to.height / 2 - svgOffsetTop;
+			// Positions relative to SVG, considering scroll/visual viewport
+			const x1 = from.right + scrollX - svgOffsetLeft;
+			const y1 = from.top + scrollY + from.height / 2 - svgOffsetTop;
+			const x2 = to.left + scrollX - svgOffsetLeft;
+			const y2 = to.top + scrollY + to.height / 2 - svgOffsetTop;
 
-		const arrowOffset = window.innerWidth * this.arrowOffsetRatio;
-		const arrowSize = window.innerWidth * this.arrowSizeRatio;
+			const arrowOffset = window.innerWidth * this.arrowOffsetRatio;
+			const arrowSize = window.innerWidth * this.arrowSizeRatio;
 
-		if (this.items[i + 1].style.display === "none") continue;
+			if (this.items[i + 1].style.display === "none") continue;
 
-		let path, pathColor, strokeWidth;
+			let path, pathColor, strokeWidth;
 
-		if (this.isFirstWrap(i + 1)) {
-			const quarterVerticalGap = (y2 - y1) / 4;
-			const midY = y1 + 2 * quarterVerticalGap;
+			if (this.isFirstWrap(i + 1)) {
+				const quarterVerticalGap = (y2 - y1) / 4;
+				const midY = y1 + 2 * quarterVerticalGap;
 
-			//winding path down to the next item.
-			path = `
+				//winding path down to the next item.
+				path = `
 				M ${x1} ${y1}
 				L ${rightMostX - svgOffsetLeft} ${y1}
 				A ${quarterVerticalGap} ${quarterVerticalGap} 0 0 1 ${rightMostX - svgOffsetLeft} ${midY}
@@ -96,36 +105,36 @@ drawArrows() {
 				A ${quarterVerticalGap} ${quarterVerticalGap} 0 0 0 ${leftMostX - svgOffsetLeft} ${y2}
 				L ${x2 - arrowOffset} ${y2}
 			`;
-			pathColor = this.snakeLineColor;
-			strokeWidth = this.snakeLineWidthRatio * arrowSize;
-		} else {
-			//straight line from --> to
-			path = `M ${x1} ${y1} L ${x2 - arrowOffset} ${y2}`;
-			pathColor = this.straightLineColor;
-			strokeWidth = this.straightLineWidthRatio * arrowSize;
-		}
+				pathColor = this.snakeLineColor;
+				strokeWidth = this.snakeLineWidthRatio * arrowSize;
+			} else {
+				//straight line from --> to
+				path = `M ${x1} ${y1} L ${x2 - arrowOffset} ${y2}`;
+				pathColor = this.straightLineColor;
+				strokeWidth = this.straightLineWidthRatio * arrowSize;
+			}
 
-		// Create arrow path
-		const pathEl = document.createElementNS(svgNS, 'path');
-		pathEl.setAttribute('d', path);
-		pathEl.setAttribute('fill', 'none');
-		pathEl.setAttribute('stroke', pathColor);
-		pathEl.setAttribute('stroke-width', strokeWidth);
+			// Create arrow path
+			const pathEl = document.createElementNS(svgNS, 'path');
+			pathEl.setAttribute('d', path);
+			pathEl.setAttribute('fill', 'none');
+			pathEl.setAttribute('stroke', pathColor);
+			pathEl.setAttribute('stroke-width', strokeWidth);
 
-		// Create arrowhead
-		const arrow = document.createElementNS(svgNS, 'polygon');
-		arrow.setAttribute('points', `
+			// Create arrowhead
+			const arrow = document.createElementNS(svgNS, 'polygon');
+			arrow.setAttribute('points', `
 			${x2},${y2}
 			${x2 - arrowOffset},${y2 - arrowSize}
 			${x2 - arrowOffset},${y2 + arrowSize}
 		`);
-		arrow.setAttribute('fill', pathColor);
+			arrow.setAttribute('fill', pathColor);
 
-		svg.appendChild(pathEl);
-		svg.appendChild(arrow);
-	}
-}		// custom event to control order of scripts running cuz this function breaks constantly ughhhhhh i HHAATEEEEE this function god it causes nothing but trouble can't ever have any good things but i love my arrows so worth i love u drawArrows even tho ur sooooo annoying
-//		const event = new CustomEvent('arrowsDrawn', {detail: {list: this}}); document.dispatchEvent(event); it doesn't even work. i cannot
+			svg.appendChild(pathEl);
+			svg.appendChild(arrow);
+		}
+	}		// custom event to control order of scripts running cuz this function breaks constantly ughhhhhh i HHAATEEEEE this function god it causes nothing but trouble can't ever have any good things but i love my arrows so worth i love u drawArrows even tho ur sooooo annoying
+	//		const event = new CustomEvent('arrowsDrawn', {detail: {list: this}}); document.dispatchEvent(event); it doesn't even work. i cannot
 
 	// find the index of the first element of the second row. If it doesn't exist return -1
 	findSecondRowFirstWrap() {
@@ -223,11 +232,3 @@ window.addEventListener('resize', () => {
 	lastfmBar.shiftItem();
 	lastfmBar.drawArrows();
 });
-
-if (window.visualViewport) {
-	window.visualViewport.addEventListener('resize', () => this.drawArrows());
-	window.visualViewport.addEventListener('scroll', () => this.drawArrows());
-} else {
-	window.addEventListener('resize', () => this.drawArrows());
-	window.addEventListener('scroll', () => this.drawArrows());
-}
