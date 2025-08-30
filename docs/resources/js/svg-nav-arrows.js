@@ -15,13 +15,7 @@ class CohomologicalList {
 		this.arrowSizeRatio = arrowSizeRatio;
 		this.arrowOffsetRatio = arrowOffsetRatio;
 
-		if (window.visualViewport) {
-			window.visualViewport.addEventListener('resize', () => this.drawArrows());
-			window.visualViewport.addEventListener('scroll', () => this.drawArrows());
-		} else {
-			window.addEventListener('resize', () => this.drawArrows());
-			window.addEventListener('scroll', () => this.drawArrows());
-		} 
+		this._attachViewportListeners();
 	}
 	
 
@@ -200,10 +194,20 @@ class CohomologicalList {
 				this.collapseNav();
 				this.drawArrows();
 			})
-
-
 		}
 	}
+
+	_attachViewportListeners() {
+		if (window.visualViewport) {
+			window.visualViewport.addEventListener('resize', () => this.drawArrows());
+			window.visualViewport.addEventListener('scroll', () => this.drawArrows());
+		} else {
+			window.addEventListener('resize', () => this.drawArrows());
+			window.addEventListener('scroll', () => this.drawArrows());
+		}
+	}
+
+
 }
 
 const navBar = new CohomologicalList('nav ul li', 'gray', 'hsla(322, 80%, 60%, 0.8)', 1/2, 3/4, 0.008, 0.012);
