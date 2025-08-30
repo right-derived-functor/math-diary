@@ -15,13 +15,10 @@ class CohomologicalList {
 		this.arrowSizeRatio = arrowSizeRatio;
 		this.arrowOffsetRatio = arrowOffsetRatio;
 
-		if (window.visualViewport) {
-			window.visualViewport.addEventListener('resize', () => this.drawArrows());
-			window.visualViewport.addEventListener('scroll', () => this.drawArrows());
-		} else {
-			window.addEventListener('resize', () => this.drawArrows());
-			window.addEventListener('scroll', () => this.drawArrows());
-		}
+		// drawArrows needs there to be dom elements loaded in to make sense.
+		document.addEventListener('DOMContentLoaded', () => {
+			this._attachViewportListeners();
+		})
 	}
 
 	// returns the vertical gap from item index in nav to the previous item in nav. Input any index of this.items greater than 0.
@@ -201,6 +198,16 @@ class CohomologicalList {
 			})
 
 
+		}
+	}
+	
+	_attachViewportListeners() {
+		if (window.visualViewport) {
+			window.visualViewport.addEventListener('resize', () => this.drawArrows());
+			window.visualViewport.addEventListener('scroll', () => this.drawArrows());
+		} else {
+			window.addEventListener('resize', () => this.drawArrows());
+			window.addEventListener('scroll', () => this.drawArrows());
 		}
 	}
 }
