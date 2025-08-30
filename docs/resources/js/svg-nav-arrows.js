@@ -15,13 +15,13 @@ class CohomologicalList {
 		this.arrowSizeRatio = arrowSizeRatio;
 		this.arrowOffsetRatio = arrowOffsetRatio;
 
-		if (window.visualViewport) {
+/*		if (window.visualViewport) {
 			window.visualViewport.addEventListener('resize', () => this.drawArrows());
 			window.visualViewport.addEventListener('scroll', () => this.drawArrows());
 		} else {
 			window.addEventListener('resize', () => this.drawArrows());
 			window.addEventListener('scroll', () => this.drawArrows());
-		} 
+		} */
 	}
 	
 
